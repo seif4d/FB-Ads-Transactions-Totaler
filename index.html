@@ -2,26 +2,43 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <!-- Meta Tags for SEO and Social Sharing -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="أداة بسيطة وفعالة لحساب إجمالي فواتير إعلانات فيسبوك بضغطة زر، تدعم الأرقام العربية وتوفر عليك الوقت والجهد.">
+    <meta name="keywords" content="فيسبوك, إعلانات, فواتير, حساب, إجمالي, أداة, javascript, كود">
+    <meta property="og:title" content="💰 حاسبة إجمالي فواتير فيسبوك">
+    <meta property="og:description" content="وداعاً للحسابات اليدوية! احسب إجمالي فواتيرك تلقائياً وبدقة متناهية.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://seif4d.github.io/FB-Ads-Transactions-Totaler/">
+
     <title>💰 حاسبة إجمالي فواتير فيسبوك</title>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* 🎨 -- المتغيرات والألوان الرئيسية -- 🎨 */
+        /* =============================================
+           🎨 1. CSS STYLES - الأنماط والتصميم
+           ============================================= */
+
+        /* --- المتغيرات الرئيسية --- */
         :root {
-            --bg-color-start: #141E30;
-            --bg-color-end: #243B55;
-            --primary-text-color: #ffffff;
-            --secondary-text-color: #c0c8d3;
-            --accent-color: #00aaff;
-            --accent-hover-color: #0088cc;
-            --card-bg-color: rgba(255, 255, 255, 0.05);
-            --card-border-color: rgba(255, 255, 255, 0.2);
+            --bg-start: #0f0c29;
+            --bg-mid: #302b63;
+            --bg-end: #24243e;
+            --primary-text: #EAEAEA;
+            --secondary-text: #b0c4de;
+            --accent-color: #3a7bd5;
+            --accent-hover: #00d2ff;
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --glow-color: rgba(58, 123, 213, 0.2);
         }
 
-        /* 🌐 -- التنسيقات العامة -- 🌐 */
+        /* --- إعادة الضبط والتنسيقات العامة --- */
         * {
             margin: 0;
             padding: 0;
@@ -34,30 +51,36 @@
 
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, var(--bg-color-start), var(--bg-color-end));
-            color: var(--primary-text-color);
-            line-height: 1.7;
+            color: var(--primary-text);
+            background: linear-gradient(-45deg, var(--bg-start), var(--bg-mid), var(--bg-end), var(--bg-start));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            line-height: 1.8;
             overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 25px;
+            position: relative;
+            z-index: 2;
         }
-        
+
         section {
-            padding: 80px 0;
+            padding: 100px 0;
             text-align: center;
         }
 
-        h1, h2, h3 {
-            font-weight: 700;
-        }
-
         h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 2.8rem;
+            margin-bottom: 25px;
             position: relative;
             display: inline-block;
         }
@@ -66,239 +89,288 @@
             content: '';
             position: absolute;
             bottom: -10px;
-            right: 0;
-            width: 70%;
-            height: 3px;
-            background-color: var(--accent-color);
+            right: 50%;
+            transform: translateX(50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
             border-radius: 2px;
         }
 
-        /* 🦸 -- قسم الهيرو (الرئيسي) -- 🦸 */
+        /* --- أيقونات SVG --- */
+        .icon {
+            width: 1em;
+            height: 1em;
+            fill: currentColor;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        /* --- قسم الهيرو --- */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            position: relative;
             padding: 40px 0;
         }
 
+        .hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 700px;
+            height: 700px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, var(--glow-color) 0%, rgba(15, 12, 41, 0) 70%);
+            z-index: 0;
+            animation: pulse 8s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+        }
+
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+            text-shadow: 0 0 25px rgba(0, 210, 255, 0.4);
         }
 
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--secondary-text-color);
-            max-width: 600px;
-            margin: 0 auto 40px auto;
-        }
-
-        .code-wrapper {
-            background-color: #0d1117;
-            border: 1px solid var(--card-border-color);
-            border-radius: 8px;
-            padding: 20px;
+        .hero .subtitle {
+            font-size: 1.4rem;
+            color: var(--secondary-text);
             max-width: 650px;
             margin: 0 auto 40px auto;
-            text-align: right;
-            direction: ltr; /* Important for code display */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* --- صندوق الكود --- */
+        .code-wrapper {
+            background: #011627;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            text-align: left;
+            direction: ltr;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
             position: relative;
         }
         
         .code-wrapper::before {
             content: '● ● ●';
             position: absolute;
-            top: 10px;
+            top: 15px;
             left: 15px;
-            color: #555;
-            font-size: 14px;
+            color: #4a6a8a;
+            letter-spacing: 5px;
         }
-
 
         .code-snippet {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Fira Code', 'Courier New', monospace;
             font-size: 1rem;
-            color: #a5d6ff;
             white-space: pre-wrap;
-            word-wrap: break-word;
-            min-height: 100px; /* To prevent layout shift */
+            min-height: 150px;
         }
+        .code-snippet .token.keyword { color: #c792ea; }
+        .code-snippet .token.function { color: #82aaff; }
+        .code-snippet .token.string { color: #c3e88d; }
+        .code-snippet .token.comment { color: #637777; }
+        .code-snippet .token.operator { color: #89ddff; }
+        .code-snippet .token.punctuation { color: #c792ea; }
         
         .code-snippet .cursor {
             display: inline-block;
-            background-color: var(--primary-text-color);
-            width: 10px;
+            background-color: var(--accent-hover);
+            width: 2px;
+            height: 1.2em;
+            vertical-align: middle;
             animation: blink 1s infinite;
         }
 
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
+        @keyframes blink { 50% { opacity: 0; } }
 
+        /* --- زر النسخ الرئيسي --- */
         .cta-button {
-            background-color: var(--accent-color);
-            color: var(--primary-text-color);
-            font-size: 1.2rem;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+            color: var(--primary-text);
+            font-size: 1.25rem;
             font-weight: 700;
-            padding: 15px 40px;
+            padding: 16px 45px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0, 170, 255, 0.3);
+            transition: all 0.3s ease-out;
+            box-shadow: 0 8px 25px rgba(0, 210, 255, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .cta-button:hover {
-            background-color: var(--accent-hover-color);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 170, 255, 0.4);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0, 210, 255, 0.35);
         }
 
         .cta-button.copied {
-            background-color: #28a745; /* Green for success */
+            background: linear-gradient(90deg, #1D976C, #93F9B9);
+            box-shadow: 0 8px 25px rgba(29, 151, 108, 0.3);
         }
-        
-        /* 💎 -- قسم المميزات وطريقة العمل -- 💎 */
+
+        /* --- بطاقات المميزات وطريقة العمل --- */
         .cards-container {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            flex-wrap: wrap;
-            margin-top: 50px;
+            margin-top: 60px;
         }
 
         .card {
-            background: var(--card-bg-color);
-            border: 1px solid var(--card-border-color);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 15px;
-            padding: 30px;
-            width: 320px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
+            padding: 40px 30px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
-        .card .icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
+        .card .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            color: var(--accent-hover);
+            line-height: 1;
         }
 
         .card h3 {
-            font-size: 1.5rem;
-            color: var(--accent-color);
+            font-size: 1.6rem;
             margin-bottom: 15px;
         }
 
         .card p {
-            color: var(--secondary-text-color);
+            color: var(--secondary-text);
         }
 
-        /* 🦶 -- الفوتر (الجزء السفلي) -- 🦶 */
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid var(--card-border-color);
+        /* --- تأثيرات الظهور عند التمرير --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
-        footer p {
-            color: var(--secondary-text-color);
+        /* --- الفوتر --- */
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            border-top: 1px solid var(--card-border);
+            background-color: rgba(0,0,0,0.1);
         }
-
+        
+        footer p { color: var(--secondary-text); }
         footer a {
             color: var(--accent-color);
             text-decoration: none;
             font-weight: 700;
             transition: color 0.3s ease;
         }
+        footer a:hover { color: var(--accent-hover); }
 
-        footer a:hover {
-            color: var(--accent-hover-color);
-        }
-        
-        /* 📱 -- التجاوب مع الشاشات الصغيرة -- 📱 */
+        /* --- التجاوب مع الشاشات الصغيرة --- */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            .hero p {
-                font-size: 1.1rem;
-            }
-            h2 {
-                font-size: 2rem;
-            }
-            .card {
-                width: 100%;
-                max-width: 350px;
-            }
+            h2 { font-size: 2.2rem; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero .subtitle { font-size: 1.2rem; }
+            .code-snippet { font-size: 0.9rem; }
+            section { padding: 80px 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ======== قسم الهيرو ======== -->
+    <!-- SVG Icon Definitions (Sprite) -->
+    <svg width="0" height="0" style="display: none;">
+        <symbol id="icon-copy" viewBox="0 0 24 24"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/></symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></symbol>
+        <symbol id="icon-code" viewBox="0 0 24 24"><path fill="currentColor" d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z"/></symbol>
+        <symbol id="icon-target" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z"/></symbol>
+        <symbol id="icon-zap" viewBox="0 0 24 24"><path fill="currentColor" d="M13,10V3L4,14H11V21L20,10H13Z"/></symbol>
+        <symbol id="icon-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.83,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"/></symbol>
+    </svg>
+
+    <!-- ======== Hero Section ======== -->
     <header class="hero">
-        <div class="container">
-            <h1>احسب إجمالي فواتيرك بضغطة زر! 🚀</h1>
-            <p>وداعاً للحسابات اليدوية المملة. هذه الأداة البسيطة تقوم بجمع كل المبالغ في صفحة معاملات إعلانات فيسبوك تلقائياً، حتى لو كانت باللغة العربية.</p>
+        <div class="hero-glow"></div>
+        <div class="container fade-in">
+            <h1>احسب فواتيرك بلمح البصر</h1>
+            <p class="subtitle">وداعاً للحسابات اليدوية المملة. هذه الأداة تقوم بجمع كل المبالغ في صفحة معاملات إعلانات فيسبوك تلقائياً، حتى لو كانت باللغة العربية.</p>
             
             <div class="code-wrapper">
                 <pre><code id="code-snippet" class="code-snippet"></code></pre>
             </div>
             
-            <button id="copy-button" class="cta-button">📋 انسخ الكود الآن</button>
+            <button id="copy-button" class="cta-button">
+                <svg class="icon" id="copy-icon-svg"><use href="#icon-copy"></use></svg>
+                <span id="copy-text">انسخ الكود الآن</span>
+            </button>
         </div>
     </header>
 
     <main>
-        <!-- ======== قسم طريقة الاستخدام ======== -->
+        <!-- ======== How it Works Section ======== -->
         <section id="how-to-use">
             <div class="container">
-                <h2>طريقة الاستخدام بسيطة جداً</h2>
+                <h2 class="fade-in">ثلاث خطوات تفصلك عن الإنجاز</h2>
                 <div class="cards-container">
-                    <div class="card">
-                        <div class="icon">📄</div>
-                        <h3>1. اذهب لصفحة المعاملات</h3>
+                    <div class="card fade-in">
+                        <div class="card-icon">1️⃣</div>
+                        <h3>اذهب لصفحة المعاملات</h3>
                         <p>افتح صفحة المعاملات في مدير الإعلانات وتأكد من ظهور كل الفواتير التي تريد حسابها.</p>
                     </div>
-                    <div class="card">
-                        <div class="icon">💻</div>
-                        <h3>2. افتح الـ Console</h3>
-                        <p>اضغط `F12` أو `Ctrl+Shift+I` لفتح أدوات المطور، ثم اذهب إلى تبويب Console.</p>
+                    <div class="card fade-in" style="transition-delay: 0.2s;">
+                        <div class="card-icon">2️⃣</div>
+                        <h3>افتح الـ Console</h3>
+                        <p>اضغط `F12` لفتح أدوات المطور، ثم اذهب إلى تبويب Console، المكان السحري لتشغيل الكود.</p>
                     </div>
-                    <div class="card">
-                        <div class="icon">✨</div>
-                        <h3>3. الصق الكود وشاهد السحر</h3>
+                    <div class="card fade-in" style="transition-delay: 0.4s;">
+                        <div class="card-icon">3️⃣</div>
+                        <h3>الصق الكود وشاهد السحر</h3>
                         <p>الصق الكود الذي نسخته، اضغط `Enter`، وسيظهر لك الإجمالي في نافذة منبثقة فوراً.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ======== قسم المميزات ======== -->
+        <!-- ======== Features Section ======== -->
         <section id="features">
             <div class="container">
-                <h2>لماذا ستُحب هذه الأداة؟</h2>
+                <h2 class="fade-in">لماذا ستُحب هذه الأداة؟</h2>
                 <div class="cards-container">
-                    <div class="card">
-                        <div class="icon">⚡</div>
-                        <h3>سرعة وسهولة</h3>
+                    <div class="card fade-in">
+                        <div class="card-icon"><svg class="icon"><use href="#icon-zap"></use></svg></div>
+                        <h3>سرعة فائقة</h3>
                         <p>توفر عليك دقائق ثمينة من الجمع اليدوي الممل، وتحصل على النتيجة في أقل من ثانية.</p>
                     </div>
-                    <div class="card">
-                        <div class="icon">🎯</div>
+                    <div class="card fade-in" style="transition-delay: 0.2s;">
+                        <div class="card-icon"><svg class="icon"><use href="#icon-target"></use></svg></div>
                         <h3>دقة متناهية</h3>
-                        <p>مصممة خصيصاً للتعامل مع الأرقام العربية والفاصلة العشرية العربية (٫) لتجنب أي أخطاء حسابية.</p>
+                        <p>مصممة خصيصاً للتعامل مع الأرقام والفاصلة العشرية العربية (٫) لتجنب أي أخطاء حسابية.</p>
                     </div>
-                    <div class="card">
-                        <div class="icon">🐙</div>
+                    <div class="card fade-in" style="transition-delay: 0.4s;">
+                        <div class="card-icon"><svg class="icon"><use href="#icon-code"></use></svg></div>
                         <h3>مفتوحة المصدر</h3>
                         <p>الكود متاح للجميع على GitHub. يمكنك الاطلاع عليه، تعديله، أو حتى المساهمة في تطويره.</p>
                     </div>
@@ -307,20 +379,30 @@
         </section>
     </main>
 
-    <!-- ======== الفوتر ======== -->
+    <!-- ======== Footer ======== -->
     <footer>
-        <div class="container">
+        <div class="container fade-in">
             <p>
-                صُنع بحب ❤️ بواسطة
+                صُنع بحب وشغف ❤️ بواسطة
                 <a href="https://github.com/seif4d" target="_blank">seif4d</a>
-                | شاهد المشروع على 
-                <a href="https://github.com/seif4d/FB-Ads-Transactions-Totaler" target="_blank">GitHub</a>
+            </p>
+            <p>
+                <a href="https://github.com/seif4d/FB-Ads-Transactions-Totaler" target="_blank" style="display:inline-flex; align-items:center; gap: 8px;">
+                    <svg class="icon"><use href="#icon-github"></use></svg>
+                    شاهد المشروع على GitHub
+                </a>
             </p>
         </div>
     </footer>
 
     <script>
-        // 📜 -- الكود الذي سيتم نسخه -- 📜
+    /* =============================================
+       ⚙️ 2. JAVASCRIPT LOGIC - منطق الجافاسكريبت
+       ============================================= */
+    
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- الكود الذي سيتم نسخه ---
         const scriptToCopy = `
 function calculateFacebookAdsTotal() {
   const amountElements = document.querySelectorAll('td[role="gridcell"][aria-colindex="3"] span');
@@ -343,54 +425,92 @@ function calculateFacebookAdsTotal() {
   console.log(\`💰💰💰 الإجمالي النهائي: \${total.toFixed(2)} ر.س.\`);
 }
 calculateFacebookAdsTotal();
-`;
+`.trim();
 
-        // 🎬 -- وظيفة تأثير الآلة الكاتبة -- 🎬
-        const codeElement = document.getElementById('code-snippet');
-        const textToType = `function calculateFacebookAdsTotal() {
-  const amountElements = document.querySelectorAll(...);
-  let total = 0;
-  amountElements.forEach(element => {
-    // ... clean and parse data
-    total += amount;
-  });
-  alert(\`💰 Total: \${total.toFixed(2)}\`);
-}`;
-        let i = 0;
+        // --- تهيئة تأثير الآلة الكاتبة ---
+        function initTypewriter() {
+            const codeElement = document.getElementById('code-snippet');
+            if (!codeElement) return;
 
-        function typeWriter() {
-            if (i < textToType.length) {
-                codeElement.innerHTML += textToType.charAt(i);
-                i++;
-                setTimeout(typeWriter, 25); // سرعة الكتابة
-            } else {
-                codeElement.innerHTML += '<span class="cursor">&nbsp;</span>'; // إضافة المؤشر الوامض في النهاية
+            const textToType = `
+<span class="token comment">// 1. Find all amount cells</span>
+<span class="token keyword">const</span> amountElements <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'...'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> total <span class="token operator">=</span> 0<span class="token punctuation">;</span>
+
+<span class="token comment">// 2. Loop, clean, and sum</span>
+amountElements<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>element <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> amount <span class="token operator">=</span> <span class="token function">parseFloat</span><span class="token punctuation">(</span>element<span class="token punctuation">.</span>textContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  total <span class="token operator">+=</span> amount<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 3. Show the result!</span>
+<span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">\`💰 Total: \${total.toFixed(2)}\`</span><span class="token punctuation">)</span><span class="token punctuation">;</span>`;
+            
+            let i = 0;
+            codeElement.innerHTML = '';
+            const typingInterval = 15;
+
+            function type() {
+                if (i < textToType.length) {
+                    codeElement.innerHTML += textToType[i];
+                    i++;
+                    setTimeout(type, typingInterval);
+                } else {
+                    codeElement.innerHTML += '<span class="cursor">&nbsp;</span>';
+                }
             }
+            type();
         }
 
-        // بدء تأثير الكتابة عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', typeWriter);
+        // --- تهيئة زر النسخ ---
+        function initCopyButton() {
+            const copyButton = document.getElementById('copy-button');
+            const copyTextSpan = document.getElementById('copy-text');
+            const copyIconSvg = document.getElementById('copy-icon-svg');
+            
+            if (!copyButton) return;
 
-
-        // 📋 -- وظيفة نسخ الكود إلى الحافظة -- 📋
-        const copyButton = document.getElementById('copy-button');
-
-        copyButton.addEventListener('click', () => {
-            navigator.clipboard.writeText(scriptToCopy.trim()).then(() => {
-                // تم النسخ بنجاح
-                const originalText = copyButton.innerText;
-                copyButton.innerText = '✅ تم النسخ!';
-                copyButton.classList.add('copied');
-                
-                setTimeout(() => {
-                    copyButton.innerText = originalText;
-                    copyButton.classList.remove('copied');
-                }, 2000); // إرجاع النص الأصلي بعد ثانيتين
-            }).catch(err => {
-                console.error('فشل النسخ: ', err);
-                alert('عذراً، حدث خطأ أثناء محاولة نسخ الكود.');
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(scriptToCopy).then(() => {
+                    const originalText = copyTextSpan.innerText;
+                    copyTextSpan.innerText = '✅ تم النسخ!';
+                    copyIconSvg.innerHTML = '<use href="#icon-check"></use>';
+                    copyButton.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        copyTextSpan.innerText = originalText;
+                        copyIconSvg.innerHTML = '<use href="#icon-copy"></use>';
+                        copyButton.classList.remove('copied');
+                    }, 2500);
+                }).catch(err => {
+                    console.error('فشل النسخ: ', err);
+                    alert('عذراً، حدث خطأ أثناء محاولة نسخ الكود.');
+                });
             });
-        });
+        }
+
+        // --- تهيئة تأثيرات الظهور عند التمرير ---
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => observer.observe(el));
+        }
+
+        // --- تشغيل كل الوظائف ---
+        initTypewriter();
+        initCopyButton();
+        initScrollAnimations();
+    });
     </script>
 </body>
 </html>
