@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 حاسبة إجمالي فواتير فيسبوك</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 🎨 -- المتغيرات والألوان الرئيسية -- 🎨 */
+        :root {
+            --bg-color-start: #141E30;
+            --bg-color-end: #243B55;
+            --primary-text-color: #ffffff;
+            --secondary-text-color: #c0c8d3;
+            --accent-color: #00aaff;
+            --accent-hover-color: #0088cc;
+            --card-bg-color: rgba(255, 255, 255, 0.05);
+            --card-border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 🌐 -- التنسيقات العامة -- 🌐 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, var(--bg-color-start), var(--bg-color-end));
+            color: var(--primary-text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 70%;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /* 🦸 -- قسم الهيرو (الرئيسي) -- 🦸 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--secondary-text-color);
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+        }
+
+        .code-wrapper {
+            background-color: #0d1117;
+            border: 1px solid var(--card-border-color);
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 650px;
+            margin: 0 auto 40px auto;
+            text-align: right;
+            direction: ltr; /* Important for code display */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .code-wrapper::before {
+            content: '● ● ●';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            color: #555;
+            font-size: 14px;
+        }
+
+
+        .code-snippet {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            color: #a5d6ff;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 100px; /* To prevent layout shift */
+        }
+        
+        .code-snippet .cursor {
+            display: inline-block;
+            background-color: var(--primary-text-color);
+            width: 10px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .cta-button {
+            background-color: var(--accent-color);
+            color: var(--primary-text-color);
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 170, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-hover-color);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 170, 255, 0.4);
+        }
+
+        .cta-button.copied {
+            background-color: #28a745; /* Green for success */
+        }
+        
+        /* 💎 -- قسم المميزات وطريقة العمل -- 💎 */
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 15px;
+            padding: 30px;
+            width: 320px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: var(--secondary-text-color);
+        }
+
+        /* 🦶 -- الفوتر (الجزء السفلي) -- 🦶 */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--card-border-color);
+        }
+        
+        footer p {
+            color: var(--secondary-text-color);
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent-hover-color);
+        }
+        
+        /* 📱 -- التجاوب مع الشاشات الصغيرة -- 📱 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======== قسم الهيرو ======== -->
+    <header class="hero">
+        <div class="container">
+            <h1>احسب إجمالي فواتيرك بضغطة زر! 🚀</h1>
+            <p>وداعاً للحسابات اليدوية المملة. هذه الأداة البسيطة تقوم بجمع كل المبالغ في صفحة معاملات إعلانات فيسبوك تلقائياً، حتى لو كانت باللغة العربية.</p>
+            
+            <div class="code-wrapper">
+                <pre><code id="code-snippet" class="code-snippet"></code></pre>
+            </div>
+            
+            <button id="copy-button" class="cta-button">📋 انسخ الكود الآن</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- ======== قسم طريقة الاستخدام ======== -->
+        <section id="how-to-use">
+            <div class="container">
+                <h2>طريقة الاستخدام بسيطة جداً</h2>
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="icon">📄</div>
+                        <h3>1. اذهب لصفحة المعاملات</h3>
+                        <p>افتح صفحة المعاملات في مدير الإعلانات وتأكد من ظهور كل الفواتير التي تريد حسابها.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">💻</div>
+                        <h3>2. افتح الـ Console</h3>
+                        <p>اضغط `F12` أو `Ctrl+Shift+I` لفتح أدوات المطور، ثم اذهب إلى تبويب Console.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">✨</div>
+                        <h3>3. الصق الكود وشاهد السحر</h3>
+                        <p>الصق الكود الذي نسخته، اضغط `Enter`، وسيظهر لك الإجمالي في نافذة منبثقة فوراً.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======== قسم المميزات ======== -->
+        <section id="features">
+            <div class="container">
+                <h2>لماذا ستُحب هذه الأداة؟</h2>
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="icon">⚡</div>
+                        <h3>سرعة وسهولة</h3>
+                        <p>توفر عليك دقائق ثمينة من الجمع اليدوي الممل، وتحصل على النتيجة في أقل من ثانية.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">🎯</div>
+                        <h3>دقة متناهية</h3>
+                        <p>مصممة خصيصاً للتعامل مع الأرقام العربية والفاصلة العشرية العربية (٫) لتجنب أي أخطاء حسابية.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon">🐙</div>
+                        <h3>مفتوحة المصدر</h3>
+                        <p>الكود متاح للجميع على GitHub. يمكنك الاطلاع عليه، تعديله، أو حتى المساهمة في تطويره.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======== الفوتر ======== -->
+    <footer>
+        <div class="container">
+            <p>
+                صُنع بحب ❤️ بواسطة
+                <a href="https://github.com/seif4d" target="_blank">seif4d</a>
+                | شاهد المشروع على 
+                <a href="https://github.com/seif4d/FB-Ads-Transactions-Totaler" target="_blank">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 📜 -- الكود الذي سيتم نسخه -- 📜
+        const scriptToCopy = `
+function calculateFacebookAdsTotal() {
+  const amountElements = document.querySelectorAll('td[role="gridcell"][aria-colindex="3"] span');
+  if (amountElements.length === 0) {
+    alert("😟 لم يتم العثور على أي معاملات!\\nتأكد من أن جدول المعاملات ظاهر بالكامل في الصفحة.");
+    return;
+  }
+  let total = 0;
+  console.log(\`✅ تم العثور على \${amountElements.length} معاملة. جاري الحساب...\`);
+  amountElements.forEach(element => {
+    const textValue = element.textContent;
+    const numberPart = textValue.replace(/[^٠-٩٫]/g, '');
+    let cleanedText = numberPart.replace(/٫/g, '.').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    const amount = parseFloat(cleanedText);
+    if (!isNaN(amount)) {
+      total += amount;
+    }
+  });
+  alert(\`🎉 تم الحساب بنجاح! 🎉\\n\\n💰 المبلغ الإجمالي هو: \${total.toFixed(2)} ر.س.\`);
+  console.log(\`💰💰💰 الإجمالي النهائي: \${total.toFixed(2)} ر.س.\`);
+}
+calculateFacebookAdsTotal();
+`;
+
+        // 🎬 -- وظيفة تأثير الآلة الكاتبة -- 🎬
+        const codeElement = document.getElementById('code-snippet');
+        const textToType = `function calculateFacebookAdsTotal() {
+  const amountElements = document.querySelectorAll(...);
+  let total = 0;
+  amountElements.forEach(element => {
+    // ... clean and parse data
+    total += amount;
+  });
+  alert(\`💰 Total: \${total.toFixed(2)}\`);
+}`;
+        let i = 0;
+
+        function typeWriter() {
+            if (i < textToType.length) {
+                codeElement.innerHTML += textToType.charAt(i);
+                i++;
+                setTimeout(typeWriter, 25); // سرعة الكتابة
+            } else {
+                codeElement.innerHTML += '<span class="cursor">&nbsp;</span>'; // إضافة المؤشر الوامض في النهاية
+            }
+        }
+
+        // بدء تأثير الكتابة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', typeWriter);
+
+
+        // 📋 -- وظيفة نسخ الكود إلى الحافظة -- 📋
+        const copyButton = document.getElementById('copy-button');
+
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(scriptToCopy.trim()).then(() => {
+                // تم النسخ بنجاح
+                const originalText = copyButton.innerText;
+                copyButton.innerText = '✅ تم النسخ!';
+                copyButton.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyButton.innerText = originalText;
+                    copyButton.classList.remove('copied');
+                }, 2000); // إرجاع النص الأصلي بعد ثانيتين
+            }).catch(err => {
+                console.error('فشل النسخ: ', err);
+                alert('عذراً، حدث خطأ أثناء محاولة نسخ الكود.');
+            });
+        });
+    </script>
+</body>
+</html>
